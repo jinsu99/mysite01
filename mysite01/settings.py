@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
+    'user',
+    'board',
+    'guestbook',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -125,3 +128,6 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = '/assets/'
+
+# session cookies(csrftoken) stored in memory
+SESSION_EXPIRE_AT_BROWER_CLOSE = True

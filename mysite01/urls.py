@@ -17,6 +17,8 @@ Including another URLconf
 from django.urls import path
 import main.views as mainviews
 import guestbook.views as guestbookview
+import user.views as userview
+import board.views as boardview
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -27,4 +29,22 @@ urlpatterns = [
     path('guestbook/add', guestbookview.add),
     path('guestbook/delete', guestbookview.delete),
     path('guestbook/deleteform', guestbookview.deleteform),
+
+    # user
+    path('user/joinform', userview.joinform),
+    path('user/joinsuccess', userview.joinsuccess),
+    path('user/join', userview.join),
+    path('user/loginform', userview.loginform),
+    path('user/login', userview.login),
+    path('user/logout', userview.logout),
+    path('user/updateform', userview.updateform),
+    path('user/update', userview.update),
+    path('user/updatesuccess', userview.updatesuccess),
+
+    # board
+    path('board/', boardview.index),
+    path('board/views?no=1', boardview.view),
+    path('board/updateform', boardview.updateform),
+    path('board/writeform', boardview.writeform),
+
 ]
