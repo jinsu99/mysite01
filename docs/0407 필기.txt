@@ -1,0 +1,79 @@
+# 필기
+    - 중복체크는 주로 javascript와 ajax를 사용해서 진행. 우린 하지않을게요
+    - 입력 길이에 따라가 varchar 는 크기가 조절된다. 저장공간 낭비는 없지만, 크기 조절되는 알고리즘이 소요
+    - 최대 길이가 정해져있는 gender는 char(6) 을 사용하자. 혹은 enum('femail','mail') 을 사용
+    - enum은 정해진 값이 아닌 경우 error가 발생
+    - email과 pw 중 어느쪽이 틀렸는지 알려주는 건 무의미 : 해킹당하기 용이
+    - {{}} 값 출력
+    - {% for %} 명령문 사용
+    - ACT(Access Control Tool) :
+
+# stateless connection의 해결책 쿠키
+    - stateless connection에서는 http는 상태를 전달하고 connection을 끊어버린다 → 해결책 : 쿠키!
+    - 쿠키의 조건
+        1. 어떤 domain
+        2. 어떤 path
+        3. Expired 언제까지 쿠키를 보내달라
+    - 쿠키의 누적 = 로그
+        > shop/product?no=10 , shop/product?no=20 , shop/product?no=30
+        > nos = 10; 20; 30
+    - 특별한 쿠키 : 세션(ssesion) 쿠키 (오전 10시 50분 쯤) / 요약 11시 17분
+        > 장고는 자동으로 쿠키를 하나 만들어 : csrftoken → 디스크가 아닌 메모리에 저장
+        > 같은 요청을 모아둔 쿠키?
+        > F12 → Network → 현재html → Cookie 확인하면 계속 같은 쿠키를 사용함을 확인할 수 있다.
+        > request에는 POST방식이나 GET방식을 전달받은 파라미터도 있지만,
+        > 쿠키 정보(csrftoken와 매치되는 딕셔너리정보:cursor사용방법에 따라 시퀀스 달라짐)도 있다.
+        > user/view.py의 login() 참고
+        > templates/base.html 참고 (line15-24)
+    - 세션의 기본 설정(setting.py) : 브라우저 실행시 session의 초기 세팅 → csrftoken을 초기화
+        # session cookies(csrftoken) stored in memory
+        SESSION_EXPIRE_AT_BROWER_CLOSE = True
+
+
+# session을 사용한 로그인과 로그아웃
+    - 로그인 : dict형태의 세션에 key를 지정, 변수에 저장
+        > request.session['authuser'] = result
+    - 로그아웃 : session을 삭제
+        > del request.session['authuser']
+
+# 로그인 여부 확인하기 : views.py > updateform 확인
+    def updateform(request):
+
+        #  Access Control (접근 제어) : 로그인 session이 없는 경우 대비
+        # 방법1
+        # if 'authuser' not in request.session:
+        #     return HttpResponseRedirect('/')
+
+        # 방법2 (추천)
+        authuser = request.session.get('authuser')
+        if authuser is None:
+            return HttpResponseRedirect('/user/loginform')
+
+        authuser = request.session['authuser']
+        result = models.findbyno(authuser['no'])
+        return render(request, 'user/updateform.html')
+
+
+
+# mysql
+    - mysql 8.0 부터는 password 함수가 없다.
+    https://stackoverflow.com/questions/52320576/in-mysql-server-8-0-the-password-function-not-working
+    CONCAT('*', UPPER(SHA1(UNHEX(SHA1('mypass'))))) : 구버전에서 password 쓸 때랑 똑같은 결과
+
+# models.py
+    - results = cusor.fetchone() : cursor.fetchone()은 조회된 결과 집합으로부터 Row객체를 가지고 온다.
+    - result = cursor.fetchmany() :
+    - result = cursor.fetchall() :
+
+# user/views.py & user/loginform.html
+    return HttpResponseRedirect('/user/loginform?result=fail')
+    =============
+    {% if request.GET.result == 'fail' %}
+    <p>
+        로그인이 실패 했습니다.
+    </p>
+    {% endif %}
+
+
+# board를 위해 테이블 생성
+    - pk 인 no 생성하고, user테이블과 1:n(board) 형태로 연결
