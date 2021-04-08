@@ -14,6 +14,10 @@ def view(request):
     no = request.GET['no']
     contents = models.findall_contents(no)
     data = {'contents': contents[0]}
+
+    hit = contents[0]['hit']+1
+    models.update_hit(hit, no)
+
     return render(request, 'board/view.html', data)
 
 

@@ -120,6 +120,32 @@ def insert(title, contents, g_no, user_no):
         print(f'error: {e}')
 
 
+def update_hit(hit, no):
+    try:
+        # DB연결
+        db = conn()
+
+        # cursor 생성
+        cursor = db.cursor()
+
+        # SQL 실행
+        sql = "update board set hit = %s where no=%s"
+        count = cursor.execute(sql, (hit, no))   # 바인딩
+
+        # DB 반영
+        db.commit()
+
+        # 자원 정리
+        cursor.close()  # 커서
+        db.close()      # DB연결 끊기
+
+        # 결과 반환
+        return count == 1
+
+    except Exception as e:
+        print(f'Error : {e}')
+
+
 def update(title, contents, no):
     try:
         # DB연결
@@ -143,7 +169,7 @@ def update(title, contents, no):
         return count == 1
 
     except Exception as e:
-        print(f'Error : {e}')  # Alt + Enter : import 단축키
+        print(f'Error : {e}')
 
 
 def delete(no, user_no):
