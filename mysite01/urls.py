@@ -40,11 +40,20 @@ urlpatterns = [
     path('user/updateform', userview.updateform),
     path('user/update', userview.update),
     path('user/updatesuccess', userview.updatesuccess),
+    path('user/reqlogin', userview.reqlogin),
 
     # board
     path('board/', boardview.index),
-    path('board/views?no=1', boardview.view),
+    path('board/views', boardview.view),
     path('board/updateform', boardview.updateform),
+    path('board/update', boardview.update),
     path('board/writeform', boardview.writeform),
+    path('board/write', boardview.write),
+    path('board/replyform', boardview.replyform),
+    path('board/reply', boardview.reply),
+    path('board/delete', boardview.delete),
+    path('board/deletealert', boardview.deletealert),
+    path('board/search', boardview.search),
+    path('board/searchlist', boardview.searchlist),
 
 ]

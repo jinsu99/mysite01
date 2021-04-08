@@ -57,6 +57,10 @@ def logout(request):
     return HttpResponseRedirect('/')
 
 
+def reqlogin(request):
+    return render(request, 'user/reqlogin.html')
+
+
 # update
 
 

@@ -143,4 +143,3 @@ def update(name, password, gender, no):
 
 
 
-
